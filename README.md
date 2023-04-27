@@ -12,8 +12,6 @@ Mongo__DataBase => Nome do database
 
 Mongo__Host => Host do MongoDB
 
-MONGODB_PORT => Posta de acesso ao MongoDB
-
 Mongo__User => Usuário do MongoDB
 
 Mongo__Password => Senha do MongoDB
