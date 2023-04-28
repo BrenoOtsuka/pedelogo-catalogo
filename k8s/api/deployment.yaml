@@ -20,6 +20,30 @@ spec:
         - containerPort: 443
           name: https
         imagePullPolicy: Always
+        readinessProbe:
+          httpGet:
+            path: /read
+            port: 80
+            scheme: HTTP
+          timeoutSeconds: 1
+          failureThreshold: 3
+          periodSeconds: 8
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: 16
+          periodSeconds: 8
+          timeoutSeconds: 2
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 80
+            scheme: HTTP
+          failureThreshold:  30
+          periodSeconds: 10
         envFrom:
           - configMapRef:
               name: api-configmap
