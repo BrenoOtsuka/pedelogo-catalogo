@@ -16,6 +16,9 @@ spec:
         image: mongo:4.2.8
         ports:
         - containerPort: 27017
+        volumeMounts:
+          - mountPath: /data/db
+            name: mongodb-data
         resources:
           requests:
             memory: 256Mi
@@ -26,3 +29,7 @@ spec:
         envFrom:
           - secretRef:
               name: mongodb-secret
+      volumes:
+        - name: mongodb-data
+          persistentVolumeClaim:
+            claimName: host-mongo-pvc
