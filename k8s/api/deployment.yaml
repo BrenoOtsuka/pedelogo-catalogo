@@ -11,6 +11,10 @@ spec:
       labels:
         app: api
     spec:
+      initContainers:
+        - name: init-pod
+          image: busybox:1.28
+          command: ["sh", "-c", "until nslookup mongo-service.default.svc.cluster.local; do echo Aguardando o banco de dados; sleep 2; done"]
       containers:
       - name: api
         image: brenootsuka/pedelogo-catalogo:v1.0.0
@@ -32,7 +36,7 @@ spec:
             path: /read
             port: 80
             scheme: HTTP
-          timeoutSeconds: 1
+          timeoutSeconds: 2
           failureThreshold: 3
           periodSeconds: 8
         livenessProbe:
@@ -49,8 +53,8 @@ spec:
             path: /health
             port: 80
             scheme: HTTP
-          failureThreshold:  30
-          periodSeconds: 10
+          failureThreshold:  3
+          periodSeconds: 8
         envFrom:
           - configMapRef:
               name: api-configmap
