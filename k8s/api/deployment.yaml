@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: api-deployment
 spec:
+  replicas: 5
   selector:
     matchLabels:
       app: api
@@ -69,3 +70,26 @@ spec:
             secretKeyRef:
               name: mongodb-secret
               key: MONGO_INITDB_ROOT_PASSWORD
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - "mongodb"
+              weight: 1
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - "api"
+              weight: 100
