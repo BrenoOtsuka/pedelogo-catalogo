@@ -2,9 +2,31 @@ pipeline {
     agent any
 
     stages {
-        stage("Teste") {
+        stage('Checkout Source') {
             steps {
-                echo "Teste"
+                git url: 'https://github.com/BrenoOtsuka/pedelogo-catalogo.git', branch: 'main'
+            }
+        }
+        
+        stage('Build Docker image') {
+            steps {
+                script {
+                    dockerapp = docker.build(
+                        "brenootsuka/pedelogo-catalogo:${env.BUILD_ID}",
+                        '-f .src/PedeLogo.Catalogo.Api/Dockerfile .'
+                    )
+                }
+            }
+        }
+
+        stage('Push Docker image to DockerHub Registry') {
+            steps {
+                script {
+                    docker.withRegistry/('registry.hub.docker.com', 'dockerhub-credential') {
+                        dockerapp.push('latest')
+                        dockerapp.push("${env.BUILD_ID}")
+                    }
+                }
             }
         }
     }
