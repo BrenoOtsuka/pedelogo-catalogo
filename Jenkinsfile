@@ -19,15 +19,15 @@ pipeline {
             }
         }
 
-        stage('Push Docker image to DockerHub Registry') {
-            steps {
-                script {
-                    docker.withRegistry('https://hub.docker.com', 'dockerhub-credential') {
-                        dockerapp.push('latest')
-                        dockerapp.push("${env.BUILD_ID}")
-                    }
-                }
-            }
-        }
+        // stage('Push Docker image to DockerHub Registry') {
+        //     steps {
+        //         script {
+        //             docker.withRegistry('https://hub.docker.com', 'dockerhub-credential') {
+        //                 dockerapp.push('latest')
+        //                 dockerapp.push("${env.BUILD_ID}")
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
